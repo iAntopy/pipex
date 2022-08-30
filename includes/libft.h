@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 16:20:53 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/04/14 19:23:11 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/08/29 02:16:53 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,27 +31,19 @@
 # define CYAN_BC	"\033[1;36m"
 # define WHITE_BC	"\033[1;37m"
 
-# define HEX_BASE_LOWERCASE "0123456789abcdef"
-# define HEX_BASE_UPPERCASE "0123456789ABCDEF"
+# ifndef SIZE_MAX
+#  define SIZE_MAX 0xffffffffffffffff
+# endif
 
-// homemade limits
-# define CHAR_MAX 127
-# define CHAR_MIN -128
-# define SHRT_MAX 32767
-# define SHRT_MIN -32768
-# define USHRT_MAX 65535
-# define INT_MAX 2147483647
-# define INT_MIN -2147483648
-# define LONG_MAX 2147483647
-# define LONG_MIN -2147483648
-# define ULONG_MAX 4294967295U
-# define LLONG_MAX 9223372036854775807LL
-# define LLONG_MIN -9223372036854775808LL
-# define ULLONG_MAX 18446744073709551615ULL
-# define SIZE_MAX 18446744073709551615ULL
+# define X_BASE "0123456789abcdef"
+# define XX_BASE "0123456789ABCDEF"
+# define DEC_BASE "0123456789"
 
+# include <limits.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <stdarg.h>
+# include <stdio.h>
 
 void	*ft_memset(void *s, int c, size_t n);
 void	ft_bzero(void *s, size_t n);
@@ -72,6 +64,7 @@ char	*ft_strstr(const char *s1, const char *s2);
 int		ft_strcmp(const char *s1, const char *s2);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_atoi(const char *str);
+int		ft_atoi_base(const char *str, int base, const char *base_str);
 void	*ft_calloc(size_t nmemb, size_t size);
 
 int		ft_isalnum(int c);
@@ -83,11 +76,14 @@ int		ft_islower(int c);
 int		ft_isupper(int c);
 int		ft_isprint(int c);
 int		ft_isspace(int c);
+int		ft_islower(int c);
+int		ft_isupper(int c);
 int		ft_tolower(int c);
 int		ft_toupper(int c);
 
 void	*ft_memalloc(size_t size);
 void	ft_memdel(void **ap);
+void	ft_memclear(void *dest, size_t size);
 char	*ft_strnew(size_t size);
 void	ft_strdel(char **as);
 void	ft_striter(char *s, void (*f)(char *));
@@ -100,7 +96,13 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strtrim(char const *s1, char const *set);
 char	**ft_split(char const *s, char c);
+char	**ft_split_set(char const *s, char *set);
+char	**ft_split_space(char const *s);
 char	*ft_itoa(int n);
+double	ft_atof(const char *str);
+int		ft_pow(int nb, int exp);
+char	*ft_strlower(char *str);
+char	*ft_strupper(char *str);
 
 void	ft_putchar(int c);
 void	ft_putstr(char const *s);
@@ -110,7 +112,72 @@ void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char const *s, int fd);
 void	ft_putendl_fd(char const *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
+void	ft_putbin(const void *addr, size_t n);
 
+void	ft_swap_i(int *a, int *b);
+void	ft_swap_f(float *a, float *b);
+int		ft_clamp(int n, int min, int max);
+
+void	fperror(char *fmt, ...);
+ssize_t	ft_deltatime_usec(void);
+ssize_t	ft_deltatime_usec_note(char *note);
+float	ft_random(void);
+int		ft_randint(int min, int range);
+
+int		malloc_free_p(size_t size, void **ptr);
+void	*malloc_free(size_t size, void **ptr);
+
+////////////// FILE SEARCH FUNCtIONS ////////////////
+// Search functions to find files in environment paths or cwd.
+//	- filename :	name of file to look for.
+//	- env :		env variable from main. If NULL acts as the access function in pwd.
+//	- found_path :	a ptr to a (char *) variable declared externaly. if func returns 1
+//			this variable will be a ptr to a malloced str with the full path
+//			to the file requested.
+//	- mode :	access flags to check access permissions. Either R_OK or W_OK or
+//			bitwise OR of both (R_OK | W_OK).
+int	find_file_in_env(char *filename, char **env, char **found_path, int mode);
+int	find_exe_in_env(char *filename, char **env, char **found_path);
+
+/// STR TAB UTILS /// for malloced char pointer tabs such as ft_split returned tab.
+int	strtab_len(char **tab);
+void	strtab_clear(char ***tab);
+void	strtab_print(char **tab);
+void	strtab_swap(char **tab, int index1, int index2);
+
+/////// GET_NEXT_LINE ////////
+# ifndef GNL_BUFFER_SIZE
+#  define GNL_BUFFER_SIZE 4096
+# endif
+
+typedef struct s_gdl
+{
+	struct s_gdl	*prev;
+	struct s_gdl	*next;
+	char			*str;
+	size_t			n;
+}	t_gdl;
+
+enum	e_fail_codes
+{
+	E_EOF = SIZE_MAX - 2,
+	E_MLC = SIZE_MAX - 1,
+	E_IFD = SIZE_MAX
+};
+
+char	*get_next_line(int fd);
+int		get_substr(char *str, size_t start, size_t n, char **ret);
+int		gdl_insert(t_gdl **dlst, t_gdl **elem, char *str, size_t push_app);
+int		join_clear_list(char *line, t_gdl **elem);
+char	*gather_line(t_gdl **chks);
+////////////////////////////////
+
+////////// FT_PRINTF ///////////
+int		ft_printf(const char *fmt, ...);
+int		ft_vprintf(const char *fmt, va_list *ap);
+/////////////////////////////////
+
+/////// SINGLE LINKED LIST FUNCTIONS ////////
 typedef struct s_list
 {
 	void			*content;
@@ -119,8 +186,9 @@ typedef struct s_list
 
 t_list	*ft_lstnew(void *content);
 t_list	*ft_lstcreate(void *content, size_t size_of);
-void	ft_lstinsert(t_list **lst, unsigned int index, t_list *new);
+int		ft_lstinsert(t_list **lst, unsigned int index, t_list *new);
 void	ft_lstadd_front(t_list **lst, t_list *new);
+void	ft_lstadd_back(t_list **lst, t_list *new);
 int		ft_lstsize(t_list *lst);
 t_list	*ft_lstlast(t_list *lst);
 void	ft_lstadd_back(t_list **lst, t_list *new);
@@ -132,5 +200,6 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 void	ft_lstprint_int(t_list *lst);
 void	ft_lstprint_str(t_list *lst);
 void	ft_lstprint_float(t_list *lst);
+///////////////////////////////////////////
 
 #endif
