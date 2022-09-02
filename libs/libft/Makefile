@@ -13,7 +13,7 @@ FUNC_NAMES_B =	lstnew lstcreate lstinsert lstadd_front lstadd_back lstsize	\
 
 # ft_randint not included because is in same file as ft_random
 FUNC_NAMES_EXTRA =	ft_printf ft_vprintf ft_random ft_clamp fperror malloc_free	\
-			get_next_line ft_deltatime_usec ft_memclear strtab_utils	\
+			get_next_line get_next_line_utils ft_deltatime_usec ft_memclear strtab_utils	\
 			find_file_in_env
 
 PREF		= ft_
@@ -56,8 +56,8 @@ fclean:		clean
 
 re:			fclean all
 
-bonus:		${NAME} ${OBJS_B}
+bonus:		${OBJS_B}
 			${AR} ${NAME} ${OBJS_B}
 
-extra:		${NAME} ${OBJS_X}
+extra:		${OBJS_X}
 			${AR} ${NAME} ${OBJS_X}

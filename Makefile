@@ -14,6 +14,7 @@ CC		= gcc
 CFLAGS		= -Wall -Wextra -Werror
 
 NAME		= Pipex
+NAME_BONUS	= Pipex_bonus
 
 .c.o:
 		-$(CC) $(CFLAGS) -I$(INCLS) -c $< -o $(<:.c=.o)
@@ -21,7 +22,12 @@ NAME		= Pipex
 $(NAME):	build_libs $(OBJS_M)
 		$(CC) $(CFLAGS) -o $(NAME) $(OBJS_M) $(LIBS)
 
+$(NAME_BONUS):	build_libs $(OBJS_M)
+		$(CC) $(CFLAGS) -o $(NAME_BONUS) $(OBJS_M) $(LIBS)
+
 all:		$(NAME)
+
+bonus:		$(NAME_BONUS)
 
 build_libs:
 	make -C $(LIBS_DIR)libft extra

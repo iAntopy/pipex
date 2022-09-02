@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 19:01:29 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/08/30 01:48:08 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/02 17:08:31 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,24 +27,12 @@ static char	find_suitable_subst_char(char *str)
 	char	*sc;
 
 	sc = SPACE_SUBST_CHARS - 1;
-	while (*(++sc))//(SPACE_SUBST_CHARS[++i])
-		if (!ft_strchr(str, *sc))//SPACE_SUBST_CHARS[i]))
+	while (*(++sc))
+		if (!ft_strchr(str, *sc))
 			return (*sc);
 	return (0);
 }
 
-/*
-// strlen excluding char c.
-static size_t	ft_strlen_xchr(const char *str, const char c)
-{
-	size_t	len;
-
-	len = 0;
-	while (*str)
-		len += (*(str++) != c);
-	return (len);
-}
-*/
 char	substitute_spaces_in_substr(char *str)
 {
 	char	*cur;
@@ -53,15 +41,15 @@ char	substitute_spaces_in_substr(char *str)
 	char	sc;
 	char	do_sub;
 
+	if (!str)
+		return (0);
 	sub = ft_strchr(str, '\'');
 	sub2 = ft_strrchr(str, '\'');
 	if (sub && sub2 != sub)
 	{
-		printf("SUBSTITUTION REQUIRED !\n");
 		do_sub = 1;
 		cur = sub;
 		sc = find_suitable_subst_char(str);
-		printf("found suitable subst char : %c (%d)\n", sc, (int)sc);
 		while (++sub != sub2)
 		{
 			if (do_sub && *sub == ' ')
@@ -76,7 +64,6 @@ char	substitute_spaces_in_substr(char *str)
 		while (*(++sub2))
 			*(cur++) = *sub2;
 		*cur = '\0';
-		printf("resulting substitution : %s\n", str);
 		return (sc);
 	}
 	return (0);
@@ -91,8 +78,6 @@ void	restore_spaces_in_substr(char **tab, char sc)
 		return ;
 	t = tab;
 	printf("SUBSTITUTION RESTORATION REQUIRED !\n");
-	printf("tab pre restoration : \n");
-	strtab_print(tab);
 	while (*t)
 	{
 		s = *t - 1;
@@ -101,6 +86,4 @@ void	restore_spaces_in_substr(char **tab, char sc)
 				*s = ' ';
 		t++;
 	}
-	printf("tab post restoration : \n");
-	strtab_print(tab);
 }

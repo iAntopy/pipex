@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 03:49:49 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/08/29 06:36:02 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/02 16:44:10 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,11 @@ static void	close_pipe(int pp[2], int close_mask)
 
 static void	child_proc_execve(int in_file, int pp[2], char **argv, char **env)
 {
-	printf("child proc : in_file, pp[0], pp[1] : %d, %d, %d \n", in_file, pp[0], pp[1]);
-	printf("CHILD closing read side of pipe : %d\n", pp[0]);
 	close_pipe(pp, PIPE_RD);
 	dup2(in_file, 0);
 	dup2(pp[1], 1);
-	execve(argv[0], argv, env);
+	if (execve(argv[0], argv, env) < 0)
+		fperror("Child process failed to execve cmd : %s\n", argv[0]);
 }
 
 static int	exec_single_cmd(int in_file, char **argv, char **env)
@@ -45,19 +44,15 @@ static int	exec_single_cmd(int in_file, char **argv, char **env)
 	ft_memclear(pp, sizeof(pp));
 	if (pipe(pp) < 0)
 		return (PPX_ERROR("pipe call failed", EXIT_PIPE_ERR));
-	printf("\nStart exec single cmd : in_file, pp[0], pp[1] : %d, %d, %d\n", in_file, pp[0], pp[1]);
 	pid = fork();
 	if (pid < 0)
 	{
-		printf("PARENT closing read/write sides of pipe : %d, %d\n", pp[0], pp[1]);
 		close_pipe(pp, PIPE_RD | PIPE_WR);
 		return (PPX_ERROR("fork call failed", EXIT_FORK_ERR));
 	}
 	else if (pid == 0)
 		child_proc_execve(in_file, pp, argv, env);
-	printf("PARENT closing write side of pipe : %d\n", pp[1]);
 	close_pipe(pp, PIPE_WR);
-	printf("PARENT closing in_file : %d\n", in_file);
 	close(in_file);
 	waitpid(pid, &status, 0);
 	if (status != EXIT_SUCCESS)
@@ -73,7 +68,6 @@ static int	exec_last_cmd(int in_file, char **argv, char **env, int out_file)
 	int	pid;
 	int	status;
 
-	printf("\nStart exec last cmd : in_file, out_file : %d, %d\n", in_file, out_file);
 	pid = fork();
 	if (pid < 0)
 		return (PPX_ERROR("fork call failed", EXIT_FORK_ERR));
@@ -83,9 +77,7 @@ static int	exec_last_cmd(int in_file, char **argv, char **env, int out_file)
 		dup2(out_file, 1);
 		execve(argv[0], argv, env);
 	}
-	printf("PARENT closing in_file : %d\n", in_file);
 	close(in_file);
-	printf("PARENT closing out_file : %d\n", out_file);
 	close(out_file);
 	waitpid(pid, &status, 0);
 	if (status != 0)
@@ -96,9 +88,9 @@ static int	exec_last_cmd(int in_file, char **argv, char **env, int out_file)
 int	exec_cmd_chain(t_ppx *ppx, char **env)
 {
 	char	***cmds;
-	int	*io;
-	int	in_file;
-	
+	int		*io;
+	int		in_file;
+
 	io = ppx->io_fds;
 	in_file = io[0];
 	cmds = ppx->cmd_args;
