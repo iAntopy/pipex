@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 15:39:24 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/08/04 01:40:06 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/02 17:43:04 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ static int	find_base_index(const char digit, const char *base_str, int *idx)
 		}
 	}
 	return (0);
-
 }
 
 // Assumes base is valid

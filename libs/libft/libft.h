@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 16:20:53 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/02 12:44:33 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/02 17:52:49 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,19 +130,22 @@ void	*malloc_free(size_t size, void **ptr);
 ////////////// FILE SEARCH FUNCtIONS ////////////////
 // Search functions to find files in environment paths or cwd.
 //	- filename :	name of file to look for.
-//	- env :		env variable from main. If NULL acts as the access function in pwd.
-//	- found_path :	a ptr to a (char *) variable declared externaly. if func returns 1
-//			this variable will be a ptr to a malloced str with the full path
+//	- env :		env variable from main. If NULL acts as
+//			the access function in pwd.
+//	- found_path :	a ptr to a (char *) variable declared 
+//			externaly. if func returns 1, this variable
+//			will be a ptr to a malloced str with the full path
 //			to the file requested.
-//	- mode :	access flags to check access permissions. Either R_OK or W_OK or
-//			bitwise OR of both (R_OK | W_OK).
-int	find_file_in_env(char *filename, char **env, char **found_path, int mode);
-int	find_exe_in_env(char *filename, char **env, char **found_path);
+//	- mode :	access flags to check access permissions.
+//			Either R_OK or W_OK or bitwise OR of both (R_OK | W_OK).
+
+int		find_file_in_env(char *filename, char **env, char **found_path, int mode);
+int		find_exe_in_env(char *filename, char **env, char **found_path);
 char	**get_env_paths(char **env);
-int	find_file_in_paths(char *filename, char **paths, char **found_path, int mode);
+int		find_file_in_paths(char *filename, char **paths, char **found_path, int mode);
 
 /// STR TAB UTILS /// for malloced char pointer tabs such as ft_split returned tab.
-int	strtab_len(char **tab);
+int		strtab_len(char **tab);
 void	strtab_clear(char ***tab);	// takes pointer to strtab or ptr to array of (char *)
 void	strtab_swap(char **tab, int index1, int index2);
 void	strtab_print(char **tab);

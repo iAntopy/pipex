@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split_set.c                                     :+:      :+:    :+:   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 15:55:00 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/08/29 02:31:53 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/07/21 18:04:55 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ char	**ft_split_set(char const *s, char *set)
 	if (!s)
 		return (NULL);
 	wcount = word_counter(s, set);
-	if (!malloc_free_p(sizeof(char *) * (wcount + 1), (void **)&tab))
+	if (!malloc_free_p(sizeof(char *) * (wcount + 1), (void **)tab))
 		return (NULL);
-	if (!word_splitter(tab, s, set) && malloc_free_p(0, (void **)&tab))
+	if (!word_splitter(tab, s, set) && malloc_free_p(0, (void **)tab))
 		return (NULL);
 	tab[wcount] = NULL;
 	return (tab);

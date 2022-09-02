@@ -6,13 +6,13 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 01:13:38 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/02 15:45:47 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/02 17:40:42 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char 	**get_env_paths(char **env)
+char	**get_env_paths(char **env)
 {
 	env--;
 	while (*(++env))
@@ -23,14 +23,14 @@ char 	**get_env_paths(char **env)
 	return (ft_split(*env + 5, ':'));
 }
 
-int	find_file_in_paths(char *filename, char **paths, char **found_path, int mode)
+int	find_file_in_paths(char *filename, char **paths, char **ret_path, int mode)
 {
 	char	fn[FILENAME_MAX];
 	char	acc_path[PATH_MAX];
 
 	if (!paths || !filename)
 		return (0);
-	*found_path = NULL;
+	*ret_path = NULL;
 	if (filename[0] != '/')
 	{
 		fn[0] = '/';
@@ -48,7 +48,7 @@ int	find_file_in_paths(char *filename, char **paths, char **found_path, int mode
 	}
 	if (*paths == NULL)
 		return (0);
-	*found_path = ft_strdup(acc_path);
+	*ret_path = ft_strdup(acc_path);
 	return (1);
 }
 
@@ -97,7 +97,8 @@ int	find_exe_in_env(char *filename, char **env, char **found_path)
 		getcwd(path, sizeof(path));
 		ft_strlcat(path, fn, sizeof(path));
 	}
-	else if (!env || !search_file_in_env(fn, env, path) || (access(path, X_OK) < 0))
+	else if (!env || !search_file_in_env(fn, env, path)
+		|| (access(path, X_OK) < 0))
 		return (0);
 	*found_path = ft_strdup(path);
 	return (1);
@@ -123,7 +124,8 @@ int	find_file_in_env(char *filename, char **env, char **found_path, int mode)
 		getcwd(path, sizeof(path));
 		ft_strlcat(path, fn, sizeof(path));
 	}
-	else if (!env || !search_file_in_env(fn, env, path) || access(path, mode) < 0)
+	else if (!env || !search_file_in_env(fn, env, path)
+		|| access(path, mode) < 0)
 		return (0);
 	*found_path = ft_strdup(path);
 	return (1);
