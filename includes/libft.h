@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 16:20:53 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/02 17:52:49 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/02 23:13:40 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,14 +139,15 @@ void	*malloc_free(size_t size, void **ptr);
 //	- mode :	access flags to check access permissions.
 //			Either R_OK or W_OK or bitwise OR of both (R_OK | W_OK).
 
-int		find_file_in_env(char *filename, char **env, char **found_path, int mode);
-int		find_exe_in_env(char *filename, char **env, char **found_path);
+int		find_file_in_env(char *fname, char **env, char **acc_path, int mode);
+int		find_exe_in_env(char *fname, char **env, char **acc_path);
 char	**get_env_paths(char **env);
-int		find_file_in_paths(char *filename, char **paths, char **found_path, int mode);
+int		find_file_in_paths(char *fname, char **paths, char **acc_path,
+			int mode);
 
-/// STR TAB UTILS /// for malloced char pointer tabs such as ft_split returned tab.
+/// STR TAB UTILS /// for malloced char ptr tabs such as ft_split returned tab.
 int		strtab_len(char **tab);
-void	strtab_clear(char ***tab);	// takes pointer to strtab or ptr to array of (char *)
+void	strtab_clear(char ***tab);	// takes ptr to strtab
 void	strtab_swap(char **tab, int index1, int index2);
 void	strtab_print(char **tab);
 

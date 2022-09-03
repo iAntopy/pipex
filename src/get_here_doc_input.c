@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 22:40:57 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/02 16:59:15 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/02 22:08:31 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	print_pipe(int *pp_rd)
 	nchrs = read(*pp_rd, buff, 4096);
 	buff[nchrs] = '\0';
 	printf("Pipe content : \n");
-	printf(buff);
+	printf("%s", buff);
 	write(pp[1], buff, nchrs);
 	close(*pp_rd);
 	close(pp[1]);

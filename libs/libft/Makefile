@@ -56,8 +56,8 @@ fclean:		clean
 
 re:			fclean all
 
-bonus:		${OBJS_B}
+bonus:		${NAME} ${OBJS_B}
 			${AR} ${NAME} ${OBJS_B}
 
-extra:		${OBJS_X}
+extra:		${NAME} ${OBJS_X}
 			${AR} ${NAME} ${OBJS_X}

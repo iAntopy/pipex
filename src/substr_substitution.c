@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 19:01:29 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/02 17:08:31 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/03 00:00:24 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,35 @@ static char	find_suitable_subst_char(char *str)
 	return (0);
 }
 
+char	substitute_spaces_in_substr(char *str)
+{
+	char	*cur;
+	char	*sub;
+	char	*sub2;
+	char	sc;
+	char	do_sub;
+
+	sub = ft_strchr(str, '\'');
+	sub2 = ft_strrchr(str, '\'');
+	sc = 0;
+	if (sub && sub2 != sub)
+	{
+		do_sub = 1;
+		cur = sub;
+		sc = find_suitable_subst_char(str);
+		while (++sub != sub2)
+		{
+			*cur = sc + ((do_sub && *sub == ' ') * (*sub - sc));
+			do_sub += (*sub == '\'') * (!do_sub - do_sub);
+			cur += !(*sub == '\'');
+		}
+		while (*(++sub2))
+			*(cur++) = *sub2;
+		*cur = '\0';
+	}
+	return (sc);
+}
+/*
 char	substitute_spaces_in_substr(char *str)
 {
 	char	*cur;
@@ -68,6 +97,7 @@ char	substitute_spaces_in_substr(char *str)
 	}
 	return (0);
 }
+*/
 
 void	restore_spaces_in_substr(char **tab, char sc)
 {

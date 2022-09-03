@@ -1,22 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi_base_test.c                                :+:      :+:    :+:   */
+/*   libftprintf.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/03 22:40:05 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/08/03 23:07:47 by iamongeo         ###   ########.fr       */
+/*   Created: 2022/03/31 15:16:50 by iamongeo          #+#    #+#             */
+/*   Updated: 2022/06/07 15:48:47 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
+# include <stdarg.h>
+# include <unistd.h>
 
-int	main()
-{
-	int	result;
+# define X_BASE "0123456789abcdef"
+# define XX_BASE "0123456789ABCDEF"
+# define DEC_BASE "0123456789"
 
-	result = ft_atoi_base("              -000000000123+++_+_+", 10, "0123456789");
-	ft_printf("result : %d\n", result);
-	return (0);
-}
+int	ft_printf(const char *fmt, ...);
+int	ft_vprintf(const char *fmt, va_list *ap);
+
+#endif

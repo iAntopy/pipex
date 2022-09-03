@@ -13,8 +13,8 @@ LIBS		= $(addprefix $(LIBS_DIR), $(_LIBS))
 CC		= gcc
 CFLAGS		= -Wall -Wextra -Werror
 
-NAME		= Pipex
-NAME_BONUS	= Pipex_bonus
+NAME		= pipex
+NAME_BONUS	= pipex_bonus
 
 .c.o:
 		-$(CC) $(CFLAGS) -I$(INCLS) -c $< -o $(<:.c=.o)
