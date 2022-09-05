@@ -1,0 +1,75 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error_handling_bns.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/04 04:50:23 by iamongeo          #+#    #+#             */
+/*   Updated: 2022/09/04 05:18:40 by iamongeo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "pipex.h"
+
+int	repport_bad_inputs(int argc)
+{
+	errno = EINVAL;
+	ft_printf(RED_BC"<[ PIPEX ERROR :: %d arguments received, needs >= 4 ]>",
+		argc - 1);
+	ft_printf(WHITE_C"\n\n pipex arguments format : \n");
+	ft_printf("\teither\t{infile} {cmd1} {cmd2} {...} {cmdn} {outfile}\n");
+	ft_printf("\tor\there_doc {LIMITER} {cmd1} {cmd2} {...} {cmdn} {outfile}\n");
+	return (-1);
+}
+
+int	repport_error(char *err)
+{
+	fperror(RED_BC"<[ PIPEX ERROR :: %s ]>", err);
+	ft_printf(WHITE_C);
+	return (-1);
+}
+
+int	repport_bad_cmd(char *cmd, int status)
+{
+	if (status == EXIT_CMD_NOT_FOUND)
+		fperror(RED_BC"<[ PIPEX ERROR :: Could not locate %s command. ]>", cmd);
+	else if (status == EXIT_CMD_NOT_EXE)
+		fperror(RED_BC"<[ PIPEX ERROR :: Command %s not executable. ]>", cmd);
+	ft_printf(WHITE_C);
+	return (-1);
+}
+
+int	repport_excessive_cmds(int argc, int here_doc)
+{
+	errno = EINVAL;
+	ft_printf(RED_BC"<[ PIPEX ERROR :: Excessive nb of cmds.");
+	fperror(" %d given, max %d ]>", argc - (3 + here_doc), CMD_MAX);
+	ft_printf(WHITE_C);
+	return (-1);
+}
+
+int	repport_child_exec_err(char *cmd, int status)
+{
+	if (status == -1)
+		fperror(RED_BC"<[ PIPEX ERROR :: execve failed with cmd %s :: %s ]>",
+			cmd, strerror(status));
+	else
+		fperror(RED_BC"<[ PIPEX ERROR :: child command %s failed :: %s ]>",
+			cmd, strerror(status));
+	ft_printf(WHITE_C);
+	return (status);
+}
+
+int	validate_pipex_input_args(int argc, int *here_doc)
+{
+	if (argc < 2)
+		return (repport_bad_inputs(argc));
+	here_doc = (ft_strcmp("here_doc", argv[1]) == 0);
+	argc -= *here_doc;
+	if (argc < 5)
+		return (repport_bad_inputs(argc));
+	if ((argc - 3) > CMD_MAX)
+		return (repport_excessive_cmds(argc, here_doc));
+	return (0);
+}

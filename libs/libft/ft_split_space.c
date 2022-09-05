@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
+/*   ft_split_space.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 15:55:00 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/02 22:30:02 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/03 20:29:14 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,18 +68,12 @@ char	**ft_split_space(char const *s)
 	tab = NULL;
 	if (!s)
 		return (NULL);
-	printf("\nentering ft_split_space\n");
-	printf("Finding word count\n");
 	wcount = word_counter(s);
-	printf("word count : %d\n", wcount);
 	tab = (char **)ft_calloc(wcount + 1, sizeof(char *));
 	if (!tab)
 		return (NULL);
-	printf("tab malloced\n");
-	printf("splitting words\n");
 	if (!word_splitter(tab, s) && malloc_free_p(0, (void **)tab))
 		return (NULL);
-	printf("splitting DONE\n");
 	tab[wcount] = NULL;
 	return (tab);
 }

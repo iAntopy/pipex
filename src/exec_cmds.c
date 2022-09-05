@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 03:49:49 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/02 16:44:10 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/04 03:31:00 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ static int	exec_single_cmd(int in_file, char **argv, char **env)
 
 	ft_memclear(pp, sizeof(pp));
 	if (pipe(pp) < 0)
-		return (PPX_ERROR("pipe call failed", EXIT_PIPE_ERR));
+		return (repport_error("pipe call failed"));
 	pid = fork();
 	if (pid < 0)
 	{
 		close_pipe(pp, PIPE_RD | PIPE_WR);
-		return (PPX_ERROR("fork call failed", EXIT_FORK_ERR));
+		return (repport_error("fork call failed"));
 	}
 	else if (pid == 0)
 		child_proc_execve(in_file, pp, argv, env);
@@ -58,7 +58,7 @@ static int	exec_single_cmd(int in_file, char **argv, char **env)
 	if (status != EXIT_SUCCESS)
 	{
 		close_pipe(pp, PIPE_RD | PIPE_WR);
-		return (report_child_exec_err(argv[0], status));
+		return (repport_child_exec_err(argv[0], status));
 	}
 	return (pp[0]);
 }
@@ -70,7 +70,7 @@ static int	exec_last_cmd(int in_file, char **argv, char **env, int out_file)
 
 	pid = fork();
 	if (pid < 0)
-		return (PPX_ERROR("fork call failed", EXIT_FORK_ERR));
+		return (repport_error("fork call failed"));
 	else if (pid == 0)
 	{
 		dup2(in_file, 0);
@@ -81,7 +81,7 @@ static int	exec_last_cmd(int in_file, char **argv, char **env, int out_file)
 	close(out_file);
 	waitpid(pid, &status, 0);
 	if (status != 0)
-		return (report_child_exec_err(argv[0], status));
+		return (repport_child_exec_err(argv[0], status));
 	return (out_file);
 }
 
@@ -97,7 +97,6 @@ int	exec_cmd_chain(t_ppx *ppx, char **env)
 	while (*(cmds + 1) && (in_file >= 0))
 		in_file = exec_single_cmd(in_file, *(cmds++), env);
 	if (in_file < 0)
-		return (in_file);
-	in_file = exec_last_cmd(in_file, *cmds, env, io[1]);
-	return (in_file);
+		return (-1);
+	return (exec_last_cmd(in_file, *cmds, env, io[1]));
 }

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 04:23:34 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/02 22:34:39 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/05 17:34:25 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	strtab_print(char **tab)
 	ft_printf("\n@----------String Table-----------@\n");
 	while (*tab)
 	{
-		ft_printf("| %d - %s\n", i, *tab);
+		ft_printf("| %d - %s$\n", i, *tab);
 		i++;
 		tab++;
 	}

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 23:19:58 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/02 23:32:26 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/05 17:13:43 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,50 +19,49 @@
 # include <sys/wait.h>
 # include <string.h>
 # include <errno.h>
-# include <stdio.h>
+//# include <stdio.h>
 
 # include "libft.h"
 
-# define CMD_MAX 64
 # define PIPE_RD 001
 # define PIPE_WR 010
 # define SPACE_SUBST_CHARS "~?&#@!|<>"
 # define HDOC_SIZE 4096
 
-# define PPX_ERROR(err, code) report_error((err), __FUNCTION__, (code))
-
 typedef struct s_pipex_super_struct
 {
 	int		nb_cmds;
-	char	**cmd_args[CMD_MAX];
+	char	**cmd_args[CMD_MAX + 1];
 	char	**paths;
 	int		io_fds[2];
 	char	sc;
 }	t_ppx;
 
-enum	e_exit_codes
+enum	e_err_codes
 {
-	EXIT_WRONG_NB_INPUTS = EINVAL,
-	EXIT_INPUT_FILE_ERR = ENOENT,
-	EXIT_OUTPUT_FILE_ERR = ENOENT,
-	EXIT_OUTPUT_OPEN_ERR,
-	EXIT_INPUT_OPEN_ERR,
-	EXIT_INVALID_CMD,
-	EXIT_PIPE_ERR,
-	EXIT_FORK_ERR,
-	EXIT_CMD_EXEC_ERR
+	ERR_OCCURED = -1,
+	EXIT_CMD_NOT_FOUND,
+	EXIT_CMD_NOT_EXE
 };
 
-int		exec_cmd_chain(t_ppx *ppx, char **env);
-int		get_here_doc_input(char *limiter);
-void	print_pipe(int *pp_rd);
+///// VALIDATOR FUNCS ///////
+int		parse_validate_cmds(t_ppx *ppx, int argc, char **argv, char **env);
+int		validate_io_files(t_ppx *ppx, int *argc, char ***argv_p, int here_doc);
+int		validate_pipex_input_args(int argc, int *here_doc);
 
-///// SUBSTITUTION TOOLS /////
+int		exec_cmd_chain(t_ppx *ppx, char **env);
+int		get_here_doc_input(char *limiter, int n_cmds);
+int		clear_ppx(t_ppx *ppx, int err_occured);
+
+///// SUBSTITUTION TOOLS 
 char	substitute_spaces_in_substr(char *str);
 void	restore_spaces_in_substr(char **tab, char sc);
 
 ///// ERROR_HANDLING /////
-int		report_error(char *err, const char *func_name, int exit_code);
-int		report_child_exec_err(char *cmd, int status);
+int		repport_bad_inputs(int argc);
+int		repport_error(char *err);
+int		repport_bad_cmd(char *cmd, int status);
+int		repport_excessive_cmds(int argc, int here_doc);
+int		repport_child_exec_err(char *cmd, int status);
 
 #endif

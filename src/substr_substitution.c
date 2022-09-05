@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 19:01:29 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/03 00:00:24 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/04 03:22:21 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	substitute_spaces_in_substr(char *str)
 		sc = find_suitable_subst_char(str);
 		while (++sub != sub2)
 		{
-			*cur = sc + ((do_sub && *sub == ' ') * (*sub - sc));
+			*cur = *sub + ((do_sub && *sub == ' ') * (sc - *sub));
 			do_sub += (*sub == '\'') * (!do_sub - do_sub);
 			cur += !(*sub == '\'');
 		}
@@ -61,43 +61,6 @@ char	substitute_spaces_in_substr(char *str)
 	}
 	return (sc);
 }
-/*
-char	substitute_spaces_in_substr(char *str)
-{
-	char	*cur;
-	char	*sub;
-	char	*sub2;
-	char	sc;
-	char	do_sub;
-
-	if (!str)
-		return (0);
-	sub = ft_strchr(str, '\'');
-	sub2 = ft_strrchr(str, '\'');
-	if (sub && sub2 != sub)
-	{
-		do_sub = 1;
-		cur = sub;
-		sc = find_suitable_subst_char(str);
-		while (++sub != sub2)
-		{
-			if (do_sub && *sub == ' ')
-				*cur = sc;
-			else
-				*cur = *sub;
-			if (*sub == '\'')
-				do_sub = !do_sub;
-			else
-				cur++;
-		}
-		while (*(++sub2))
-			*(cur++) = *sub2;
-		*cur = '\0';
-		return (sc);
-	}
-	return (0);
-}
-*/
 
 void	restore_spaces_in_substr(char **tab, char sc)
 {
@@ -107,7 +70,6 @@ void	restore_spaces_in_substr(char **tab, char sc)
 	if (!sc)
 		return ;
 	t = tab;
-	printf("SUBSTITUTION RESTORATION REQUIRED !\n");
 	while (*t)
 	{
 		s = *t - 1;
