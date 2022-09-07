@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_cmd.c                                         :+:      :+:    :+:   */
+/*   exec_cmds.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 03:49:49 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/04 03:31:00 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/06 20:00:15 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static void	close_pipe(int pp[2], int close_mask)
+void	close_pipe(int pp[2], int close_mask)
 {
 	if ((close_mask & PIPE_RD) && pp[0] >= 3)
 	{

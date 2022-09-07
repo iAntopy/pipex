@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 23:14:24 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/04 04:44:04 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/07 19:38:13 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,14 @@ int	main(int argc, char **argv, char **env)
 	t_ppx	ppx;
 	int		here_doc;
 
-	if (validate_pipex_input_args(argc, &here_doc) < 0)
-		return (errno);
 	ft_memclear(&ppx, sizeof(t_ppx));
-	printf("validate io\n");
+	if (validate_pipex_input_args(argc, argv, &here_doc) < 0)
+		return (errno);
 	if (validate_io_files(&ppx, &argc, &argv, here_doc) < 0)
 		return (errno);
-	printf("validate cmds\n");
 	if (parse_validate_cmds(&ppx, argc, argv, env) < 0)
 		return (errno);
-	print_cmds(ppx.cmd_args);
-	printf("exec cmds\n");
 	if (exec_cmd_chain(&ppx, env) < 0)
 		return (errno);
-	printf("EXIT_SUCCESS\n");
 	return (clear_ppx(&ppx, !ERR_OCCURED));
 }

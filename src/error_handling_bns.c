@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 04:50:23 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/04 05:18:40 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/07 19:21:49 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 int	repport_bad_inputs(int argc)
 {
 	errno = EINVAL;
-	ft_printf(RED_BC"<[ PIPEX ERROR :: %d arguments received, needs >= 4 ]>",
+	ft_printf(RED_BC"<[ PIPEX ERROR :: wrong nb of args received (%d) ]>",
 		argc - 1);
 	ft_printf(WHITE_C"\n\n pipex arguments format : \n");
 	ft_printf("\teither\t{infile} {cmd1} {cmd2} {...} {cmdn} {outfile}\n");
-	ft_printf("\tor\there_doc {LIMITER} {cmd1} {cmd2} {...} {cmdn} {outfile}\n");
+	ft_printf("\tor\there_doc {LIMITER} {cmd1} {cmd2} {...} {cmdn} {outfile}\n\n");
 	return (-1);
 }
 
@@ -40,15 +40,6 @@ int	repport_bad_cmd(char *cmd, int status)
 	return (-1);
 }
 
-int	repport_excessive_cmds(int argc, int here_doc)
-{
-	errno = EINVAL;
-	ft_printf(RED_BC"<[ PIPEX ERROR :: Excessive nb of cmds.");
-	fperror(" %d given, max %d ]>", argc - (3 + here_doc), CMD_MAX);
-	ft_printf(WHITE_C);
-	return (-1);
-}
-
 int	repport_child_exec_err(char *cmd, int status)
 {
 	if (status == -1)
@@ -61,15 +52,13 @@ int	repport_child_exec_err(char *cmd, int status)
 	return (status);
 }
 
-int	validate_pipex_input_args(int argc, int *here_doc)
+int	validate_pipex_input_args(int argc, char **argv, int *here_doc)
 {
-	if (argc < 2)
+	if (argc < 2)
 		return (repport_bad_inputs(argc));
-	here_doc = (ft_strcmp("here_doc", argv[1]) == 0);
+	*here_doc = (ft_strcmp("here_doc", argv[1]) == 0);
 	argc -= *here_doc;
-	if (argc < 5)
-		return (repport_bad_inputs(argc));
-	if ((argc - 3) > CMD_MAX)
-		return (repport_excessive_cmds(argc, here_doc));
+	if ((argc < 5) || ((argc - 3) > CMD_MAX))
+		return (repport_bad_inputs(argc + *here_doc));
 	return (0);
 }

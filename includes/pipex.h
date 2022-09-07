@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 23:19:58 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/05 17:13:43 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/07 19:49:10 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 # include <sys/wait.h>
 # include <string.h>
 # include <errno.h>
-//# include <stdio.h>
 
 # include "libft.h"
 
@@ -47,8 +46,9 @@ enum	e_err_codes
 ///// VALIDATOR FUNCS ///////
 int		parse_validate_cmds(t_ppx *ppx, int argc, char **argv, char **env);
 int		validate_io_files(t_ppx *ppx, int *argc, char ***argv_p, int here_doc);
-int		validate_pipex_input_args(int argc, int *here_doc);
+int		validate_pipex_input_args(int argc, char **argv, int *here_doc);
 
+void	close_pipe(int pp[2], int close_mask);
 int		exec_cmd_chain(t_ppx *ppx, char **env);
 int		get_here_doc_input(char *limiter, int n_cmds);
 int		clear_ppx(t_ppx *ppx, int err_occured);

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 21:50:28 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/04 04:33:24 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/07 19:38:29 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static int	validate_input_file(int io[2], int argc, char **argv, int here_doc)
 	char	*fn;
 
 	fn = NULL;
-	ft_printf("argc : %d\n", argc);
 	if (here_doc)
 		io[0] = get_here_doc_input(argv[2], argc - 5);
 	else if (find_file_in_env(argv[1], NULL, &fn, R_OK))
@@ -27,6 +26,8 @@ static int	validate_input_file(int io[2], int argc, char **argv, int here_doc)
 	malloc_free_p(0, (void **)&fn);
 	if (io[0] < 0)
 		return (repport_error("Input file open failed."));
+	else if (io[0] == 0)
+		return (-1);
 	return (0);
 }
 
