@@ -2,7 +2,7 @@
 SRC_DIR		= src/
 
 _SRC	=	pipex_main \
-			validater_funcs \
+			validator_funcs \
 			substr_substitution \
 			error_handling	\
 			get_here_doc_input
