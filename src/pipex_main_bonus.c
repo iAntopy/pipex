@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 23:14:24 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/08 07:21:15 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/08 07:21:46 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	clear_ppx(t_ppx *ppx, int exit_code)
 	return (exit_code);
 }
 
-void	close_pipe(int *pp, int close_mask)
+void	close_pipe(int pp[2], int close_mask)
 {
 	if ((close_mask & PIPE_RD) && pp[0] >= 3)
 	{

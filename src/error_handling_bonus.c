@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 04:50:23 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/07 19:21:49 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/08 06:38:54 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,19 @@ int	repport_bad_cmd(char *cmd, int status)
 	return (-1);
 }
 
-int	repport_child_exec_err(char *cmd, int status)
+int	check_cmd_exec_err(char *cmd, int status, int *pp, int pid)
 {
-	if (status == -1)
-		fperror(RED_BC"<[ PIPEX ERROR :: execve failed with cmd %s :: %s ]>",
+	if (pid < 0)
+	{
+		close_pipe(pp, PIPE_RD | PIPE_WR);
+		fperror(RED_BC"<[ PIPEX ERROR :: fork call failed ]>"WHITE_C);
+	}
+	else if (status != EXIT_SUCCESS)
+	{
+		close_pipe(pp, PIPE_RD | PIPE_WR);
+		fperror(RED_BC"<[ PIPEX ERROR :: child cmd %s failed :: %s ]>"WHITE_C,
 			cmd, strerror(status));
-	else
-		fperror(RED_BC"<[ PIPEX ERROR :: child command %s failed :: %s ]>",
-			cmd, strerror(status));
-	ft_printf(WHITE_C);
+	}
 	return (status);
 }
 
