@@ -36,7 +36,7 @@ AR		= ar -rcs
 
 RM		= rm -f
 
-NAME		= ../libs/libft.a
+NAME		= libft.a
 
 %.o: 		%.c
 			-${CC} ${CFLAGS} -I./ -c $< -o $@

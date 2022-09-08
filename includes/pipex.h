@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 23:19:58 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/08 07:46:44 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/08 08:26:30 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,10 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <sys/wait.h>
-# include <string.h>
 # include <errno.h>
-# include <stdio.h>
 
 # include "libft.h"
 
-# define PIPE_RD 001
-# define PIPE_WR 010
 # define SPACE_SUBST_CHARS "~?&#@!|<>-+%"
 # define HDOC_SIZE 4096
 
@@ -42,6 +38,12 @@ enum	e_err_codes
 	ERR_OCCURED = -1,
 	EXIT_CMD_NOT_FOUND,
 	EXIT_CMD_NOT_EXE
+};
+
+enum	e_pipe_masks
+{
+	PIPE_RD = 001,
+	PIPE_WR = 010
 };
 
 ///// GENERIC UTILS ///////

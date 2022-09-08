@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 21:50:28 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/08 07:40:00 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/08 07:57:53 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ int	validate_io_files(t_ppx *ppx, int *argc, char ***argv_p, int here_doc)
 
 	io = ppx->io_fds;
 	if (validate_input_file(io, *argc, *argv_p, here_doc) < 0)
-		return (-1);//clear_ppx(ppx, ERR_OCCURED));
+		return (-1);
 	if (validate_output_file(io, *argc, *argv_p, here_doc) < 0)
-		return (-1);//(clear_ppx(ppx, ERR_OCCURED));
+		return (-1);
 	*argv_p += 2 + here_doc;
 	*argc -= (3 + here_doc);
 	return (0);
@@ -85,7 +85,7 @@ int	parse_validate_cmds(t_ppx *ppx, int argc, char **argv, char **env)
 		else if (access(filename, X_OK) < 0)
 			status = repport_bad_cmd(cmds[i][0], EXIT_CMD_NOT_EXE);
 		if (status)
-			return (-1);//(clear_ppx(ppx, ERR_OCCURED));
+			return (-1);
 		malloc_free_p(0, (void **)&cmds[i][0]);
 		cmds[i][0] = filename;
 	}

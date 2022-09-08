@@ -20,9 +20,7 @@ OBJ_B		= $(SRC_B:.c=.o)
 
 INCLS		= includes/
 
-LIBS_DIR	= libs/
-_LIBFT		= libft.a
-LIBFT		= $(addprefix $(LIBS_DIR), $(_LIBFT))
+LIBFT		= libft/libft.a
 
 $(OBJ_M):	DEF_CMD_MAX := -D CMD_MAX=2
 $(OBJ_B):	DEF_CMD_MAX := -D CMD_MAX=128

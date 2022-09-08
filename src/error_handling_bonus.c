@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 04:50:23 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/08 06:38:54 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/08 08:22:08 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,7 @@ int	check_cmd_exec_err(char *cmd, int status, int *pp, int pid)
 	else if (status != EXIT_SUCCESS)
 	{
 		close_pipe(pp, PIPE_RD | PIPE_WR);
-		fperror(RED_BC"<[ PIPEX ERROR :: child cmd %s failed :: %s ]>"WHITE_C,
-			cmd, strerror(status));
+		fperror(RED_BC"<[ PIPEX ERROR :: child cmd %s failed ]>"WHITE_C, cmd);
 	}
 	return (status);
 }
