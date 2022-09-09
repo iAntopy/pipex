@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 23:19:58 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/08 08:26:30 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/09 05:29:33 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <errno.h>
+# include <string.h>
 
 # include "libft.h"
 
@@ -29,7 +30,8 @@ typedef struct s_pipex_super_struct
 	int		nb_cmds;
 	char	**cmd_args[CMD_MAX + 1];
 	char	**paths;
-	int		io_fds[2];
+	int		io[2];
+	int		pids[CMD_MAX + 1];
 	char	sc;
 }	t_ppx;
 
@@ -66,6 +68,7 @@ int		repport_bad_inputs(int argc);
 int		repport_error(char *err);
 int		repport_bad_cmd(char *cmd, int status);
 int		repport_excessive_cmds(int argc, int here_doc);
-int		check_cmd_exec_err(char *cmd, int status, int pp[2], int pid);
+int		repport_cmd_exec_failure(char *cmd, int status);
+//int		check_cmd_exec_err(char *cmd, int status, int pp[2], int pid);
 
 #endif

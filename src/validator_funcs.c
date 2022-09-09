@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 21:50:28 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/08 08:40:12 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/09 05:19:19 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static int	validate_input_file(int io[2], int argc, char **argv, int here_doc)
 	fn = NULL;
 	if (here_doc)
 		io[0] = get_here_doc_input(argv[2], argc - 5);
+	else if (access(argv[1], R_OK) == 0)
+		io[0] = open(argv[1], O_RDONLY);
 	else if (find_file_in_env(argv[1], NULL, &fn, R_OK))
 		io[0] = open(fn, O_RDONLY);
 	else
@@ -54,7 +56,7 @@ int	validate_io_files(t_ppx *ppx, int *argc, char ***argv_p, int here_doc)
 {
 	int		*io;
 
-	io = ppx->io_fds;
+	io = ppx->io;
 	if (validate_input_file(io, *argc, *argv_p, here_doc) < 0)
 		return (-1);
 	if (validate_output_file(io, *argc, *argv_p, here_doc) < 0)

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 23:14:24 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/08 07:21:15 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/09 05:42:47 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,12 @@ int	clear_ppx(t_ppx *ppx, int exit_code)
 {
 	char	***cmds;
 	int		*io;
+	int		i;
+	int		*pids;
+	int		status;
 
-	io = ppx->io_fds;
+	io = ppx->io;
+	pids = ppx->pids;
 	if (*ppx->cmd_args)
 	{
 		cmds = ppx->cmd_args - 1;
@@ -30,6 +34,10 @@ int	clear_ppx(t_ppx *ppx, int exit_code)
 		close(io[0]);
 	if (io[1] && io[1] > 0)
 		close(io[1]);
+	i = CMD_MAX;
+	while (--i)
+		if (pids[i] && pids[i] > 0)
+			waitpid(ppx->pids[i], &status, 0);
 	return (exit_code);
 }
 
@@ -47,32 +55,33 @@ void	close_pipe(int *pp, int close_mask)
 	}
 }
 
-static int	exec_single_cmd(int *infile, char **argv, char **env, int outfile)
+static int	exec_single_cmd(t_ppx *ppx, int i, char **argv, char **env)
 {
-	int	pid;
-	int	status;
 	int	pp[2];
 
 	ft_memclear(pp, sizeof(pp));
-	if (outfile)
-		pp[1] = outfile;
+	if (i == (ppx->nb_cmds - 1))
+		pp[1] = ppx->io[1];
 	else if (pipe(pp) < 0)
 		return (repport_error("pipe call failed"));
-	pid = fork();
-	if (pid < 0)
-		return (check_cmd_exec_err(argv[0], -1, pp, pid));
-	else if (pid == 0)
+	ppx->pids[i] = fork();
+	if (ppx->pids[i] < 0)
+	{
+		close_pipe(pp, PIPE_RD | PIPE_WR);
+		return (repport_error("fork() call failed"));
+	}
+	else if (ppx->pids[i] == 0)
 	{
 		close_pipe(pp, PIPE_RD);
-		dup2(*infile, 0);
+		dup2(ppx->io[0], 0);
 		dup2(pp[1], 1);
-		execve(argv[0], argv, env);
+		if (execve(argv[0], argv, env) < -1)
+			return (repport_error("execve() call failed"));
 	}
 	close_pipe(pp, PIPE_WR);
-	close_pipe(infile, PIPE_RD);
-	waitpid(pid, &status, 0);
-	*infile = pp[0] + (status != EXIT_SUCCESS) * (status - pp[0]);
-	return (check_cmd_exec_err(argv[0], status, pp, pid));
+	close_pipe(ppx->io, PIPE_RD);
+	ppx->io[0] = pp[0];
+	return (0);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -81,6 +90,7 @@ int	main(int argc, char **argv, char **env)
 	int		here_doc;
 	char	***cmds;
 	int		*io;
+	int		i;
 
 	ft_memclear(&ppx, sizeof(t_ppx));
 	if (validate_pipex_input_args(argc, argv, &here_doc) < 0
@@ -88,9 +98,17 @@ int	main(int argc, char **argv, char **env)
 		|| parse_validate_cmds(&ppx, argc, argv, env) < 0)
 		return (clear_ppx(&ppx, errno));
 	cmds = ppx.cmd_args - 1;
-	io = ppx.io_fds;
-	while (*(++cmds))
-		if (exec_single_cmd(io, *cmds, env, !*(cmds + 1) * io[1]) != 0)
-			return (clear_ppx(&ppx, io[0]));
+	io = ppx.io;
+	i = -1;
+	while (++i < ppx.nb_cmds)
+		if (exec_single_cmd(&ppx, i, ppx.cmd_args[i], env) != EXIT_SUCCESS)
+			return (clear_ppx(&ppx, errno));
+	while (--i)
+	{
+		waitpid(ppx.pids[i], &here_doc, 0);
+		if (here_doc != EXIT_SUCCESS)
+			return (repport_cmd_exec_failure(ppx.cmd_args[i][0], here_doc));
+		ppx.pids[i] = -1;
+	}
 	return (clear_ppx(&ppx, EXIT_SUCCESS));
 }
