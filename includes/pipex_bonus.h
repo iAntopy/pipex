@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 23:19:58 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/11 03:05:29 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/10 07:14:29 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include <unistd.h>
 # include <fcntl.h>
@@ -30,22 +30,12 @@ typedef struct s_pipex_super_struct
 	int		nb_cmds;
 	char	**paths;
 	int		io[2];
-	int		pp[2];
 	int		pids[CMD_MAX + 1];
-	int		*in;
-	int		rd_pipe;
-	int		*out;
 }	t_ppx;
 
 enum	e_exit_codes
 {
 	ENOCMD = 127
-};
-
-enum	e_pipe_flags
-{
-	FIRST_CMD = 01,
-	LAST_CMD = 010
 };
 
 ///// GENERIC UTILS ///////

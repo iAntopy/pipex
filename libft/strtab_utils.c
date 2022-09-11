@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 04:23:34 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/05 17:34:25 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/10 06:09:12 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	strtab_clear(char ***tab)
 {
 	char	**t;
 
+	if (!tab || !(*tab))
+		return ;
 	t = *tab;
 	t--;
 	while (*(++t))

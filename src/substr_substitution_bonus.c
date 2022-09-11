@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   substr_substitution.c                              :+:      :+:    :+:   */
+/*   substr_substitution_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 19:01:29 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/04 03:22:21 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/10 04:52:02 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 // Looks for a section of a string representing a substring to a longer str.
 // eg. :  "cut -d' ' -f1" or "grep 'This is not a drill !'"

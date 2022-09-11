@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 16:20:53 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/02 23:13:40 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/09 20:57:22 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,7 @@ char	*gather_line(t_gdl **chks);
 
 ////////// FT_PRINTF ///////////
 int		ft_printf(const char *fmt, ...);
+int		ft_eprintf(const char *fmt, ...);
 int		ft_vprintf(const char *fmt, va_list *ap);
 /////////////////////////////////
 

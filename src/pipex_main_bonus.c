@@ -1,33 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_main.c                                       :+:      :+:    :+:   */
+/*   pipex_main_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 23:14:24 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/09 05:43:30 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/10 06:44:39 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
+#include <stdio.h>
 
 int	clear_ppx(t_ppx *ppx, int exit_code)
 {
-	char	***cmds;
 	int		*io;
 	int		i;
 	int		*pids;
-	int		status;
 
 	io = ppx->io;
 	pids = ppx->pids;
-	if (*ppx->cmd_args)
-	{
-		cmds = ppx->cmd_args - 1;
-		while (*(++cmds))
-			strtab_clear(cmds);
-	}
 	if (ppx->paths)
 		strtab_clear(&ppx->paths);
 	if (io[0] && io[0] > 0)
@@ -37,27 +30,29 @@ int	clear_ppx(t_ppx *ppx, int exit_code)
 	i = CMD_MAX;
 	while (--i)
 		if (pids[i] && pids[i] > 0)
-			waitpid(ppx->pids[i], &status, 0);
+			waitpid(pids[i], NULL, 0);
 	return (exit_code);
 }
 
-void	close_pipe(int *pp, int close_mask)
+int	close_pipe(int *rd, int *wr)
 {
-	if ((close_mask & PIPE_RD) && pp[0] >= 3)
+	if (rd && *rd >= 3)
 	{
-		close(pp[0]);
-		pp[0] = -1;
+		close(*rd);
+		*rd = -1;
 	}
-	if ((close_mask & PIPE_WR) && pp[1] >= 3)
+	if (wr && *wr >= 3)
 	{
-		close(pp[1]);
-		pp[1] = -1;
+		close(*wr);
+		*wr = -1;
 	}
+	return (0);
 }
 
-static int	exec_single_cmd(t_ppx *ppx, int i, char **argv, char **env)
+static int	exec_single_cmd(t_ppx *ppx, int i, char *cmd, char **env)
 {
-	int	pp[2];
+	int		pp[2];
+	char	**argv;
 
 	ft_memclear(pp, sizeof(pp));
 	if (i == (ppx->nb_cmds - 1))
@@ -66,49 +61,49 @@ static int	exec_single_cmd(t_ppx *ppx, int i, char **argv, char **env)
 		return (repport_error("pipe call failed"));
 	ppx->pids[i] = fork();
 	if (ppx->pids[i] < 0)
-	{
-		close_pipe(pp, PIPE_RD | PIPE_WR);
-		return (repport_error("fork() call failed"));
-	}
+		return (close_pipe(pp, pp + 1) & repport_error("fork failed"));
 	else if (ppx->pids[i] == 0)
 	{
-		close_pipe(pp, PIPE_RD);
+		close_pipe(pp, NULL);
+		if (parse_validate_cmd(ppx->paths, cmd, &argv) != 0)
+			exit(close_pipe(pp, pp + 1) & clear_ppx(ppx, errno));
 		dup2(ppx->io[0], 0);
 		dup2(pp[1], 1);
 		if (execve(argv[0], argv, env) < -1)
-			return (repport_error("execve() call failed"));
+			exit(close_pipe(pp, pp + 1) & repport_error("execve failed"));
 	}
-	close_pipe(pp, PIPE_WR);
-	close_pipe(ppx->io, PIPE_RD);
+	close_pipe(&ppx->io[0], pp + 1);
 	ppx->io[0] = pp[0];
 	return (0);
+}
+
+static void	waitpid_wrapper(int *pid, int *status, int flags)
+{
+	waitpid(*pid, status, flags);
+	*pid = -1;
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	t_ppx	ppx;
 	int		here_doc;
-	char	***cmds;
-	int		*io;
 	int		i;
+	int		status;
 
 	ft_memclear(&ppx, sizeof(t_ppx));
-	if (validate_pipex_input_args(argc, argv, &here_doc) < 0
-		|| validate_io_files(&ppx, &argc, &argv, here_doc) < 0
-		|| parse_validate_cmds(&ppx, argc, argv, env) < 0)
+	if (validate_pipex_input_args(argc, argv, &here_doc) != 0
+		|| validate_io_files(ppx.io, argc, argv, here_doc) != 0)
 		return (clear_ppx(&ppx, errno));
-	cmds = ppx.cmd_args - 1;
-	io = ppx.io;
+	ppx.nb_cmds = argc - 3 - here_doc;
+	argv += 2 + here_doc;
+	ppx.paths = get_env_paths(env);
 	i = -1;
 	while (++i < ppx.nb_cmds)
-		if (exec_single_cmd(&ppx, i, ppx.cmd_args[i], env) != EXIT_SUCCESS)
+		if (exec_single_cmd(&ppx, i, argv[i], env) != EXIT_SUCCESS)
 			return (clear_ppx(&ppx, errno));
-	while (--i)
-	{
-		waitpid(ppx.pids[i], &here_doc, 0);
-		if (here_doc != EXIT_SUCCESS)
-			return (repport_cmd_exec_failure(ppx.cmd_args[i][0], here_doc));
-		ppx.pids[i] = -1;
-	}
-	return (clear_ppx(&ppx, EXIT_SUCCESS));
+	status = EXIT_SUCCESS;
+	waitpid_wrapper(&ppx.pids[--i], &status, 0);
+	while (--i >= 0)
+		waitpid_wrapper(&ppx.pids[i], NULL, 0);
+	return (clear_ppx(&ppx, status));
 }
