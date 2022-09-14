@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    pipex_tester.sh                                    :+:      :+:    :+:    #
+#    pipex_perso_tester.sh                              :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/10 02:46:45 by iamongeo          #+#    #+#              #
-#    Updated: 2022/09/10 04:06:06 by iamongeo         ###   ########.fr        #
+#    Updated: 2022/09/12 23:10:26 by iamongeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,10 @@ echo CMD1 $CMD1
 echo CMD2 $CMD2
 echo OUTFILE $OUTFILE
 
+if [ -f $OUTFILE ]; then
+	cp $OUTFILE $OUTREAL
+	cp $OUTFILE $OUTFAKE
+fi
 
 echo "Testing official pipex vs 42 pipex :"
 echo
