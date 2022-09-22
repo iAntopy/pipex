@@ -2,15 +2,12 @@
 SRC_DIR		= src/
 
 _SRC	=	pipex_main \
+			pipe_utils	\
 			validator_funcs \
-			substr_substitution \
 			error_handling	\
 			get_here_doc_input
 
 SRC			= $(addprefix $(SRC_DIR), $(_SRC))
-
-#_SRC_M		= $(SRC) error_handling_man.c
-#_SRC_B		= $(SRC) error_handling_bns.c
 
 SRC_M		= $(addsuffix .c, $(SRC))
 SRC_B		= $(addsuffix _bonus.c, $(SRC))
@@ -48,7 +45,7 @@ all:		$(NAME)
 bonus:		$(NAME_BONUS)
 
 clean:
-		rm -f $(OBJ_B) $(OBJ_M) $(LIBS)
+		rm -f $(OBJ_B) $(OBJ_M) $(LIBFT)
 
 fclean:		clean
 		rm -f $(NAME)

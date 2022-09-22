@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 21:50:28 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/13 02:57:28 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/21 22:19:06 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,37 +57,23 @@ int	parse_validate_cmd(char	**paths, char *cmd, char ***ret_argv)
 	char	*filename;
 	char	**argv;
 	char	sc;
+	char	*norm_cmd;
 
-//	printf(CYAN_BC"CHILD %d parse_validate : start errno : %d\n"WHITE_C, getpid(), errno);
 	*ret_argv = NULL;
-//	printf(CYAN_BC"CHILD  %d parse_validate : 1 errno : %d\n"WHITE_C,  getpid(), errno);
-	sc = substitute_spaces_in_substr(cmd);
-//	printf(CYAN_BC"CHILD %d  parse_validate : 2 errno : %d\n"WHITE_C,  getpid(), errno);
-	argv = ft_split_space(cmd);
-//	printf(CYAN_BC"CHILD %d  parse_validate : 3 errno : %d\n"WHITE_C,  getpid(), errno);
+	norm_cmd = cmd;
+	sc = substring_substitution(cmd, &norm_cmd);
+	argv = ft_split_space(norm_cmd);
 	if (!argv)
 		return (repport_error("malloc failed on split"));
-//	printf(CYAN_BC"CHILD %d  parse_validate : 4 errno : %d\n"WHITE_C,  getpid(), errno);
-	restore_spaces_in_substr(argv, sc);
-//	printf(CYAN_BC"CHILD %d filename %s\n", getpid(), argv[0]);
-//	printf(CYAN_BC"CHILD %d  parse_validate : 5 errno : %d\n"WHITE_C,  getpid(), errno);
+	restore_substrings_in_tab(argv, sc);
+	if (sc)
+		malloc_free_p(0, (void **)&norm_cmd);
 	if (!find_file_in_paths(argv[0], paths, &filename, 0))
-//	{
-//		printf(CYAN_BC"CHILD %d  parse_validate ERROR : 5.5 errno : %d\n"WHITE_C,  getpid(), errno);
 		return (repport_bad_cmd(&argv, &filename));
-//	}
-//	printf(CYAN_BC"CHILD %d  parse_validate : 6 filename (%s) errno : %d\n"WHITE_C,  getpid(), filename, errno);
 	if (access(filename, X_OK) < 0)
-//	{
-//		printf(CYAN_BC"CHILD %d  parse_validate ERROR : 6.5 errno : %d\n"WHITE_C,  getpid(), errno);
 		return (repport_bad_cmd(&argv, &filename));
-//	}
-//	printf(CYAN_BC"CHILD %d  parse_validate : 7 errno : %d\n"WHITE_C,  getpid(), errno);
 	malloc_free_p(0, (void **)&argv[0]);
-//	printf(CYAN_BC"CHILD %d  parse_validate : 8 errno : %d\n"WHITE_C,  getpid(), errno);
 	argv[0] = filename;
-//	printf(CYAN_BC"CHILD %d  parse_validate : 9 errno : %d\n"WHITE_C,  getpid(), errno);
 	*ret_argv = argv;
-//	printf(CYAN_BC"CHILD %d  parse_validate : 10 EXIT errno : %d\n"WHITE_C,  getpid(), errno);
 	return (0);
 }

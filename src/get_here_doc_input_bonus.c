@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_here_doc_input_bonus.c                         :+:      :+:    :+:   */
+/*   get_here_doc_input.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 22:40:57 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/10 04:51:30 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/10 02:10:21 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "pipex.h"
 
 static int	read_exception(int pp[2], int err_occured)
 {

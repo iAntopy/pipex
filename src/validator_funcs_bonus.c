@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   validator_funcs_bonus.c                            :+:      :+:    :+:   */
+/*   validator_funcs.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 21:50:28 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/10 06:19:31 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/21 22:26:06 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "pipex.h"
 
 int	validate_pipex_input_args(int argc, char **argv, int *here_doc)
 {
@@ -57,15 +57,20 @@ int	parse_validate_cmd(char	**paths, char *cmd, char ***ret_argv)
 	char	*filename;
 	char	**argv;
 	char	sc;
+	char	*norm_cmd;
 
-	sc = substitute_spaces_in_substr(cmd);
 	*ret_argv = NULL;
-	argv = ft_split_space(cmd);
+	norm_cmd = cmd;
+	sc = substring_substitution(cmd, &norm_cmd);
+	argv = ft_split_space(norm_cmd);
 	if (!argv)
 		return (repport_error("malloc failed on split"));
-	restore_spaces_in_substr(argv, sc);
-	if (!find_file_in_paths(argv[0], paths, &filename, F_OK)
-		|| access(filename, X_OK) < 0)
+	restore_substrings_in_tab(argv, sc);
+	if (sc)
+		malloc_free_p(0, (void **)&norm_cmd);
+	if (!find_file_in_paths(argv[0], paths, &filename, 0))
+		return (repport_bad_cmd(&argv, &filename));
+	if (access(filename, X_OK) < 0)
 		return (repport_bad_cmd(&argv, &filename));
 	malloc_free_p(0, (void **)&argv[0]);
 	argv[0] = filename;

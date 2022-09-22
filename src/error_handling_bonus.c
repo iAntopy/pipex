@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handling_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/28 23:18:30 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/10 07:13:58 by iamongeo         ###   ########.fr       */
+/*   Created: 2022/09/21 19:52:25 by iamongeo          #+#    #+#             */
+/*   Updated: 2022/09/21 22:27:21 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,13 @@ int	repport_bad_cmd(char ***argv, char **filename)
 	}
 	malloc_free_p(0, (void **)filename);
 	strtab_clear(argv);
+	errno = status;
 	return (status);
+}
+
+int	repport_execve_failed(char *cmd)
+{
+	ft_eprintf(RED_BC"<[ PIPEX ERROR :: %s cmd execution failed ]>\n"WHITE_C,
+		cmd);
+	return (errno);
 }

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 23:18:30 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/11 03:36:58 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/21 22:27:11 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int	repport_bad_cmd(char ***argv, char **filename)
 {
 	int	status;
 
-//	printf("CHILD repport_bad_cmd start with errno : %d\n", errno);
 	if (filename && *filename)
 	{
 		status = EACCES;
@@ -50,25 +49,18 @@ int	repport_bad_cmd(char ***argv, char **filename)
 	else
 	{
 		status = ENOCMD;
-		ft_eprintf(RED_BC"<[ PIPEX ERROR :: command not found : %s ]>\n"WHITE_C,
+		ft_eprintf(RED_BC"<[ PIPEX ERROR :: %s : command not found ]>\n"WHITE_C,
 			(*argv)[0]);
 	}
 	malloc_free_p(0, (void **)filename);
 	strtab_clear(argv);
-//	printf("CHILD : Exit repport_bad_cmd with status : %d\n", status);
 	errno = status;
 	return (status);
 }
-/*
-int	repport_bad_cmd(char ***argv, char **filename)
-{
-	int	status;
 
-	status = errno;
-	ft_eprintf(RED_BC"<[ PIPEX ERROR :: command not found : %s ]>\n"WHITE_C,
-		(*argv)[0]);
-	malloc_free_p(0, (void **)filename);
-	strtab_clear(argv);
-	return (status);
+int	repport_execve_failed(char *cmd)
+{
+	ft_eprintf(RED_BC"<[ PIPEX ERROR :: %s cmd execution failed ]>\n"WHITE_C,
+		cmd);
+	return (errno);
 }
-*/
