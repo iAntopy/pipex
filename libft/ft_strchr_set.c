@@ -1,25 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstcreate.c                                     :+:      :+:    :+:   */
+/*   ft_strchr_set.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/28 15:47:39 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/02 21:22:58 by iamongeo         ###   ########.fr       */
+/*   Created: 2022/09/13 08:19:40 by iamongeo          #+#    #+#             */
+/*   Updated: 2022/09/14 15:13:13 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list	*ft_lstcreate(void *content, size_t size)
+char	*ft_strchr_set(const char *s, const char *set)
 {
-	void	*data;
-	t_list	*lst;
-
-	if (!malloc_free_p(size, (void **)&data))
+	if (!s || !set)
 		return (NULL);
-	ft_memcpy(data, content, size);
-	lst = ft_lstnew(data);
-	return (lst);
+	while (*s && !ft_strchr(set, *s))
+		s++;
+	if (*s)
+		return ((char *)s);
+	return (NULL);
 }

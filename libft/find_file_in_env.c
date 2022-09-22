@@ -6,11 +6,12 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 01:13:38 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/02 17:40:42 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/19 21:22:02 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <errno.h>
 
 char	**get_env_paths(char **env)
 {
@@ -42,7 +43,7 @@ int	find_file_in_paths(char *filename, char **paths, char **ret_path, int mode)
 	{
 		ft_strlcpy(acc_path, *paths, PATH_MAX);
 		ft_strlcat(acc_path, fn, PATH_MAX);
-		if (access(acc_path, F_OK | mode) == 0)
+		if (access(acc_path, F_OK | mode) == 0 && set_errno(0))
 			break ;
 		paths++;
 	}

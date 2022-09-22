@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 16:20:53 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/02 23:13:40 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/21 23:08:33 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 size_t	ft_strlcat(char *dest, const char *src, size_t size);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strrchr(const char *s, int c);
+char	*ft_strchr_set(const char *s, const char *set);
+char	*ft_strrchr_set(const char *s, const char *set);
 char	*ft_strnstr(const char *s1, const char *s2, size_t n);
 char	*ft_strstr(const char *s1, const char *s2);
 int		ft_strcmp(const char *s1, const char *s2);
@@ -104,6 +106,10 @@ int		ft_pow(int nb, int exp);
 char	*ft_strlower(char *str);
 char	*ft_strupper(char *str);
 
+char	substring_substitution(char *str, char **subst);
+void	restore_substring(char *str, char sc);
+void	restore_substrings_in_tab(char **tab, char sc);
+
 void	ft_putchar(int c);
 void	ft_putstr(char const *s);
 void	ft_putendl(char const *s);
@@ -118,6 +124,7 @@ void	ft_swap_i(int *a, int *b);
 void	ft_swap_f(float *a, float *b);
 int		ft_clamp(int n, int min, int max);
 
+int		set_errno(int n);
 void	fperror(char *fmt, ...);
 ssize_t	ft_deltatime_usec(void);
 ssize_t	ft_deltatime_usec_note(char *note);
@@ -130,24 +137,22 @@ void	*malloc_free(size_t size, void **ptr);
 ////////////// FILE SEARCH FUNCtIONS ////////////////
 // Search functions to find files in environment paths or cwd.
 //	- filename :	name of file to look for.
-//	- env :		env variable from main. If NULL acts as
-//			the access function in pwd.
-//	- found_path :	a ptr to a (char *) variable declared 
-//			externaly. if func returns 1, this variable
-//			will be a ptr to a malloced str with the full path
-//			to the file requested.
-//	- mode :	access flags to check access permissions.
-//			Either R_OK or W_OK or bitwise OR of both (R_OK | W_OK).
-
-int		find_file_in_env(char *fname, char **env, char **acc_path, int mode);
-int		find_exe_in_env(char *fname, char **env, char **acc_path);
+//	- env :			env variable from main. If NULL acts as the access
+//						function in pwd.
+//	- found_path :	a ptr to a (char *) variable declared externaly.
+//						If func returns 1 this variable will be a ptr
+//						to a malloced str with the full path to the
+//						file requested.
+//	- mode :		access flags to check access permissions. Either
+//					R_OK or W_OK or bitwise OR of both (R_OK | W_OK).
+int		find_file_in_env(char *fname, char **env, char **fpath, int mode);
+int		find_exe_in_env(char *fname, char **env, char **fpath);
 char	**get_env_paths(char **env);
-int		find_file_in_paths(char *fname, char **paths, char **acc_path,
-			int mode);
+int		find_file_in_paths(char *fname, char **paths, char **fpath, int mode);
 
 /// STR TAB UTILS /// for malloced char ptr tabs such as ft_split returned tab.
 int		strtab_len(char **tab);
-void	strtab_clear(char ***tab);	// takes ptr to strtab
+void	strtab_clear(char ***tab);	// takes ptr of ptr to array of (char *)
 void	strtab_swap(char **tab, int index1, int index2);
 void	strtab_print(char **tab);
 
@@ -180,6 +185,7 @@ char	*gather_line(t_gdl **chks);
 
 ////////// FT_PRINTF ///////////
 int		ft_printf(const char *fmt, ...);
+int		ft_eprintf(const char *fmt, ...);
 int		ft_vprintf(const char *fmt, va_list *ap);
 /////////////////////////////////
 

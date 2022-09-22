@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 15:54:45 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/04/14 14:43:56 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/21 23:03:11 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,13 @@
 
 char	*ft_strchr(const char *s, int c)
 {
-	unsigned char	cc;
+	char	cc;
 
+	if (!s)
+		return (NULL);
 	cc = (unsigned char)c;
-	while (*s)
-	{
-		if (*s == cc)
-			return ((char *)s);
+	while (*s && (*s != cc))
 		s++;
-	}
 	if (*s == cc)
 		return ((char *)s);
 	return (NULL);

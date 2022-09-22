@@ -1,17 +1,18 @@
 FUNC_NAMES_M =	issign isspace isalpha isdigit isalnum isascii		\
 		isprint strlen memset bzero memcpy memmove strlcpy	\
-		strlcat isupper islower toupper tolower strchr strrchr	\
+		strlcat isupper islower toupper tolower				\
+		strchr strrchr strchr_set strrchr_set				\
 		strcmp strncmp memchr memcmp memclear strnstr		\
-		atoi atoi_base itoa \
+		atoi atoi_base itoa 					\
 		calloc strlcat substr strjoin strtrim strdup		\
 		split split_set split_space				\
 		strmapi striteri					\
 		putchar_fd putstr_fd putendl_fd putnbr_fd		\
 		pow strlower strupper 		
 	
-FUNC_NAMES_X =	ft_printf ft_vprintf ft_random ft_clamp fperror malloc_free	\
-		get_next_line get_next_line_utils ft_deltatime_usec 	\
-		strtab_utils find_file_in_env \
+FUNC_NAMES_X =	ft_printf ft_eprintf ft_vprintf ft_random ft_clamp fperror 	\
+		malloc_free get_next_line get_next_line_utils ft_deltatime_usec \
+		strtab_utils find_file_in_env substring_substitution set_errno	\
 
 
 FUNC_NAMES_B =	lstnew lstcreate lstinsert lstadd_front lstadd_back lstsize	\
