@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 16:45:15 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/21 23:02:59 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/21 23:32:53 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ char	substring_substitution(char *str, char	**subst)
 	char	dlim;
 	char	*sub;
 
-	*subst = NULL;
 	if (!str || !subst)
 		return (0);
 	sc = find_suitable_subst_char(str);
