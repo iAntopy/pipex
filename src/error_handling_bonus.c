@@ -1,59 +1,66 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_handling_man.c                               :+:      :+:    :+:   */
+/*   error_handling_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/28 23:18:30 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/09 05:54:41 by iamongeo         ###   ########.fr       */
+/*   Created: 2022/09/21 19:52:25 by iamongeo          #+#    #+#             */
+/*   Updated: 2022/09/21 22:27:21 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 int	repport_bad_inputs(int argc)
 {
 	errno = EINVAL;
-	ft_printf(RED_BC"<[ PIPEX ERROR :: wrong nb of args received (%d) ]>",
+	ft_eprintf(RED_BC"<[ PIPEX ERROR :: wrong nb of args received (%d) ]>\n",
 		argc - 1);
-	ft_printf(WHITE_C"\n\n pipex arguments format : \n");
-	ft_printf("\teither\t{infile} {cmd1} {cmd2} {outfile}\n");
-	ft_printf("\tor\there_doc {LIMITER} {cmd1} {cmd2} {outfile}\n");
-	return (-1);
+	ft_eprintf(WHITE_C"\n\n pipex arguments format : \n");
+	ft_eprintf("\teither\t{infile} {cmd1} {cmd2} {...} {cmdn} {outfile}\n");
+	ft_eprintf("\tor\there_doc {LIMITER} {cmd1} {cmd2} {...} {cmnd} {outfile}\n");
+	return (errno);
+}
+
+int	repport_file_error(char *filename)
+{
+	ft_eprintf(RED_BC"<[ PIPEX ERROR :: %s : %s ]>\n"WHITE_C,
+		strerror(errno), filename);
+	return (errno);
 }
 
 int	repport_error(char *err)
 {
-	fperror(RED_BC"<[ PIPEX ERROR :: %s ]>", err);
-	ft_printf(WHITE_C);
-	return (-1);
+	ft_eprintf(RED_BC"<[ PIPEX ERROR :: %s ]>\n"WHITE_C, err);
+	return (errno);
 }
 
-int	repport_bad_cmd(char *cmd, int status)
+int	repport_bad_cmd(char ***argv, char **filename)
 {
-	if (status == EXIT_CMD_NOT_FOUND)
-		fperror(RED_BC"<[ PIPEX ERROR :: command not found : %s ]>", cmd);
-	else if (status == EXIT_CMD_NOT_EXE)
-		fperror(RED_BC"<[ PIPEX ERROR :: Command %s not executable. ]>", cmd);
-	ft_printf(WHITE_C);
-	return (-1);
-}
+	int	status;
 
-int	repport_cmd_exec_failure(char *cmd, int status)
-{
-	fperror(RED_BC"<[ PIPEX ERROR :: cmd %s failed with status %s ]>"WHITE_C,
-		cmd, strerror(status));
+	if (filename && *filename)
+	{
+		status = EACCES;
+		ft_eprintf(RED_BC"<[ PIPEX ERROR :: Permission denied %s ]>\n"WHITE_C,
+			(*argv)[0]);
+	}
+	else
+	{
+		status = ENOCMD;
+		ft_eprintf(RED_BC"<[ PIPEX ERROR :: command not found : %s ]>\n"WHITE_C,
+			(*argv)[0]);
+	}
+	malloc_free_p(0, (void **)filename);
+	strtab_clear(argv);
+	errno = status;
 	return (status);
 }
 
-int	validate_pipex_input_args(int argc, char **argv, int *here_doc)
+int	repport_execve_failed(char *cmd)
 {
-	if (argc < 2)
-		return (repport_bad_inputs(argc));
-	*here_doc = (ft_strcmp("here_doc", argv[1]) == 0);
-	argc -= *here_doc;
-	if ((argc < 5) || ((argc - 3) > CMD_MAX))
-		return (repport_bad_inputs(argc + *here_doc));
-	return (0);
+	ft_eprintf(RED_BC"<[ PIPEX ERROR :: %s cmd execution failed ]>\n"WHITE_C,
+		cmd);
+	return (errno);
 }

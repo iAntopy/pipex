@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 23:19:58 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/21 21:55:45 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/21 22:01:33 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include <unistd.h>
 # include <fcntl.h>
@@ -45,12 +45,6 @@ enum	e_exit_codes
 	ENOCMD = 127
 };
 
-enum	e_pipe_flags
-{
-	FIRST_CMD = 01,
-	LAST_CMD = 010
-};
-
 ///// GENERIC UTILS ///////
 int		close_pipe(int *rd, int *wr);
 int		init_pipe(t_ppx *ppx, int i);
@@ -69,5 +63,7 @@ int		repport_error(char *err);
 int		repport_file_error(char *filename);
 int		repport_bad_cmd(char ***argv, char **filename);
 int		repport_execve_failed(char *cmd);
+//int		repport_excessive_cmds(int argc, int here_doc);
+//int		repport_cmd_exec_failure(char *cmd, int status);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 22:40:57 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/07 19:45:22 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/10 02:10:21 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	read_exception(int pp[2], int err_occured)
 {
-	close_pipe(pp, PIPE_RD | PIPE_WR);
+	close_pipe(pp, pp + 1);
 	if (err_occured)
 		fperror(RED_BC"<[PIPEX ERROR :: pipe call failed. ]>"WHITE_C);
 	return (err_occured);
@@ -38,13 +38,13 @@ int	get_here_doc_input(char *limiter, int n_pipes)
 		ft_printf("heredoc> ");
 		nchrs = read(0, buff, HDOC_SIZE);
 		if (nchrs < 0)
-			return (read_exception(pp, ERR_OCCURED));
+			return (read_exception(pp, 1));
 		else if (nchrs == 0)
 			return (read_exception(pp, 0));
 		else if (nchrs > 1 && ft_strncmp(buff, limiter, nchrs - 1) == 0)
 			break ;
 		write(pp[1], buff, nchrs);
 	}
-	close_pipe(pp, PIPE_WR);
+	close_pipe(NULL, pp + 1);
 	return (pp[0]);
 }
