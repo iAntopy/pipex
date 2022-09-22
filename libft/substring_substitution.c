@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 16:45:15 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/21 18:21:55 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/21 23:02:59 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ char	substring_substitution(char *str, char	**subst)
 	char	dlim;
 	char	*sub;
 
+	*subst = NULL;
 	if (!str || !subst)
 		return (0);
 	sc = find_suitable_subst_char(str);
@@ -89,24 +90,3 @@ void	restore_substrings_in_tab(char **tab, char sc)
 	while (*tab)
 		restore_substring(*(tab++), sc);
 }
-/*
-int	main()
-{
-	char	str[] = "Ceci est une 'quote de fou' ! \"Incoyable ce truc de oof             \" !";
-	char	*subst;
-	char	sc;
-	char	**tab;
-	
-	sc = substring_substitution(str, &subst);
-	ft_printf("Final string after substitution : %s\n", str);
-	tab = ft_split(subst, ' ');
-	ft_printf("tab after substring substitution : \n");
-	strtab_print(tab);
-	restore_substrings_in_tab(tab, sc);
-	ft_printf("tab after subtring recovery : \n");
-	strtab_print(tab);
-	ft_printf("Original str : %s\n", str);
-	ft_printf("Substituted str : %s\n", subst);
-	return (0);
-}
-*/
