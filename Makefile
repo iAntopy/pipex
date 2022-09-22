@@ -48,6 +48,6 @@ clean:
 		rm -f $(OBJ_B) $(OBJ_M) $(LIBFT)
 
 fclean:		clean
-		rm -f $(NAME)
+		rm -f $(NAME) $(NAME_BONUS)
 
 re:			fclean all
