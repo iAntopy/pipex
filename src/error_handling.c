@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 23:18:30 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/21 22:27:11 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/09/22 15:19:53 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	repport_bad_inputs(int argc)
 	errno = EINVAL;
 	ft_eprintf(RED_BC"<[ PIPEX ERROR :: wrong nb of args received (%d) ]>\n",
 		argc - 1);
-	ft_eprintf(WHITE_C"\n\n pipex arguments format : \n");
+	ft_eprintf(WHITE_C"\n pipex arguments format : \n");
 	ft_eprintf("\teither\t{infile} {cmd1} {cmd2} {outfile}\n");
 	ft_eprintf("\tor\there_doc {LIMITER} {cmd1} {cmd2} {outfile}\n");
 	return (errno);
