@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 23:18:30 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/22 15:19:53 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/10/13 03:22:36 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	repport_error(char *err)
 
 int	repport_bad_cmd(char ***argv, char **filename)
 {
-	int	status;
+	int		status;
 
 	if (filename && *filename)
 	{

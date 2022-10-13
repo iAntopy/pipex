@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 23:19:58 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/21 22:01:33 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/10/12 23:08:08 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int		close_pipe(int *rd, int *wr);
 int		init_pipe(t_ppx *ppx, int i);
 
 ///// VALIDATOR FUNCS ///////
+int		str_is_whitespace_only(char *str);
 int		parse_validate_cmd(char **paths, char *cmd, char ***ret_argv);
 int		validate_io_files(int *io, int argc, char **argv_p, int here_doc);
 int		validate_pipex_input_args(int argc, char **argv, int *here_doc);
@@ -63,7 +64,5 @@ int		repport_error(char *err);
 int		repport_file_error(char *filename);
 int		repport_bad_cmd(char ***argv, char **filename);
 int		repport_execve_failed(char *cmd);
-//int		repport_excessive_cmds(int argc, int here_doc);
-//int		repport_cmd_exec_failure(char *cmd, int status);
 
 #endif

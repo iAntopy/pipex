@@ -1,16 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   validator_funcs.c                                  :+:      :+:    :+:   */
+/*   validator_funcs_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/03 21:50:28 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/21 22:26:06 by iamongeo         ###   ########.fr       */
+/*   Created: 2022/10/12 20:43:53 by iamongeo          #+#    #+#             */
+/*   Updated: 2022/10/12 23:30:40 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
+
+int	str_is_whitespace_only(char *str)
+{
+	str--;
+	while (*(++str))
+		if (!ft_isspace(*str))
+			return (0);
+	return (1);
+}
 
 int	validate_pipex_input_args(int argc, char **argv, int *here_doc)
 {
@@ -59,6 +68,8 @@ int	parse_validate_cmd(char	**paths, char *cmd, char ***ret_argv)
 	char	sc;
 	char	*norm_cmd;
 
+	if (str_is_whitespace_only(cmd))
+		return (repport_error("command contains whitespaces only"));
 	*ret_argv = NULL;
 	norm_cmd = cmd;
 	sc = substring_substitution(cmd, &norm_cmd);
